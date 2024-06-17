@@ -1,8 +1,8 @@
-# Proyecto de Gestión de Series y Naves Espaciales
+# Proyecto de Gestión de Series y Naves Espaciales 📋
 Este proyecto es una aplicación Java Spring Boot que gestiona información sobre series, películas, naves espaciales y personajes. La aplicación expone una API RESTful para realizar operaciones CRUD sobre estas entidades. Además, se ha implementado seguridad básica utilizando Spring Security.
 
-# Tecnologías Utilizadas
-* Java 11
+# Tecnologías Utilizadas 🛠️
+* Java 21
 * Spring Boot
 * Spring Data JPA
 * Spring Security
@@ -12,15 +12,39 @@ Este proyecto es una aplicación Java Spring Boot que gestiona información sobr
 * Mockito
 * Lombok
 * Maven
+## Diagrama de la solución 📊️
+- Diagrama de clases de la solución inicial:
+  ![Diagram_class.png](Diagram_class.png)
 # Configuración del Proyecto
 ## Dependencias
 Las dependencias principales utilizadas en el proyecto se encuentran en el archivo pom.xml:
 ## Configuración de Seguridad
 La seguridad se configura en la clase SecurityConfig:
+
 ## Configuración de Base de Datos
 La configuración de la base de datos se encuentra en el archivo application.yml:
 ### Scripts de Datos de Prueba
+```
+-- Datos para la tabla series_movie
+INSERT INTO TB_SERIES_MOVIE (title, release_date, type) VALUES ('Star Wars: Episode IV', '1977-05-25', 'Movie'),
+('Star Trek: The Original Series', '1966-09-08', 'Series'),
+('Battlestar Galactica', '2004-10-18', 'Series');
 
+-- Datos para la tabla spacecraft
+INSERT INTO TB_SPACECRAFT (name, model, manufacturer, length, crew_capacity, passenger_capacity, series_movie_id) VALUES
+('Millennium Falcon', 'YT-1300 light freighter', 'Corellian Engineering Corporation', 34.75, 6, 6, 1),
+('USS Enterprise', 'Constitution-class', 'Starfleet', 288.6, 430, 0, 2),
+('Galactica', 'Battlestar', 'Colonial Fleet', 1438, 2000, 5000, 3);
+
+-- Datos para la tabla character
+INSERT INTO TB_SPACE_CHARACTER (name, role, species, gender, birth_date, spacecraft_id) VALUES
+('Han Solo', 'Captain', 'Human', 'Male', '1942-07-12', 1),
+('Chewbacca', 'Co-pilot', 'Wookiee', 'Male', '0000-01-01', 1), -- El año 200 BBY no puede representarse en formato de fecha estándar, por lo que se usa un placeholder
+('James T. Kirk', 'Captain', 'Human', 'Male', '2233-03-22', 2),
+('Spock', 'First Officer', 'Vulcan', 'Male', '2230-01-06', 2),
+('William Adama', 'Commander', 'Human', 'Male', '1945-10-19', 3),
+('Kara Thrace', 'Pilot', 'Human', 'Female', '1980-01-10', 3);
+```
 ## Ejecución de Pruebas
 Las pruebas unitarias se han implementado utilizando JUnit 5 y Mockito.
 
@@ -91,3 +115,8 @@ Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:
 5. Abre un Pull Request.
 # Licencia
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo LICENSE para obtener más información.
+
+## Autor ✒
+
+_Equipo de trabajo_
+* **Jaime Peredo** - *Desarrollador* - [jperedo](https://gitlab/jperedo)
