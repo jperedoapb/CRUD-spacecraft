@@ -2,12 +2,14 @@ package org.japb.spacecraftservice.application.dto;
 
 import lombok.Data;
 import jakarta.validation.constraints.*;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
 @Data
 public class SpacecraftDTO {
-    private Long id;
+    private Long spaceId;
 
     @NotBlank(message = "Name is mandatory")
     private String name;

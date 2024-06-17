@@ -6,20 +6,21 @@ import org.japb.spacecraftservice.application.dto.SeriesMovieDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@RequestMapping("/api/seriesmovies")
 public interface SeriesMovieControllerSpec {
-    @PostMapping("/series-movies")
+    @PostMapping
     ResponseEntity<SeriesMovieDTO> createSeriesMovie(@Valid @RequestBody SeriesMovieDTO seriesMovieDTO);
 
-    @GetMapping("/series-movies")
+    @GetMapping
     ResponseEntity<List<SeriesMovieDTO>> getAllSeriesMovies();
 
-    @GetMapping("/series-movies/{serieId}")
+    @GetMapping("/{serieId}")
     ResponseEntity<SeriesMovieDTO> getSeriesMovieById(@PathVariable Long serieId);
 
-    @PutMapping("/series-movies/{serieId}")
+    @PutMapping("/{serieId}")
     ResponseEntity<SeriesMovieDTO> updateSeriesMovie(@PathVariable Long serieId,
                                                      @Valid @RequestBody SeriesMovieDTO seriesMovieDTO);
 
-    @DeleteMapping("/series-movies/{serieId}")
+    @DeleteMapping("/{serieId}")
     ResponseEntity<Void> deleteSeriesMovie(@PathVariable Long serieId);
 }

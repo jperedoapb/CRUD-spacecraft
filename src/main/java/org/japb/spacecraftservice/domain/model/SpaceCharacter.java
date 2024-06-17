@@ -21,7 +21,7 @@ public class SpaceCharacter extends RepresentationModel<SpaceCharacter> implemen
   @Temporal(TemporalType.DATE)
     private LocalDate birthDate;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "spacecraft_id", nullable = false)
     private Spacecraft spacecraft;
 }

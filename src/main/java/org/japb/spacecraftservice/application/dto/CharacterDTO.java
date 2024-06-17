@@ -2,24 +2,15 @@ package org.japb.spacecraftservice.application.dto;
 
 
 import jakarta.validation.constraints.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.time.LocalDate;
 
+@Data
+@EqualsAndHashCode
+public class CharacterDTO {
 
-public record CharacterDTO (Long id,
-                            @NotBlank(message = "Name is mandatory")
-                            String name,
-                            @NotBlank(message = "Role is mandatory")
-                            String role,
-                            @NotBlank(message = "Species is mandatory")
-                            String species,
-                            @NotBlank(message = "Gender is mandatory")
-                            String gender,
-                            @PastOrPresent(message = "Birth date cannot be in the future")
-                            LocalDate birthDate,
-                            @NotNull(message = "Spacecraft ID is mandatory")
-                            Long spacecraftId
-){
-    /*
     private Long id;
 
     @NotBlank(message = "Name is mandatory")
@@ -40,5 +31,4 @@ public record CharacterDTO (Long id,
     @NotNull(message = "Spacecraft ID is mandatory")
     private Long spacecraftId;
 
-     */
 }

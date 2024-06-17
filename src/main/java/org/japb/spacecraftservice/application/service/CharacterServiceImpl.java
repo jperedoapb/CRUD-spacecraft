@@ -7,6 +7,7 @@ import org.japb.spacecraftservice.domain.model.SpaceCharacter;
 import org.japb.spacecraftservice.domain.model.Spacecraft;
 import org.japb.spacecraftservice.domain.repository.CharacterRepository;
 import org.japb.spacecraftservice.domain.repository.SpacecraftRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -33,23 +34,27 @@ public class CharacterServiceImpl implements CharacterService {
         Spacecraft spacecraft = spacecraftRepository.findById(spacecraftId)
                 .orElseThrow(() -> new ResourceNotFoundException("Spacecraft not found with id " + spacecraftId));
 
-        SpaceCharacter character = new SpaceCharacter();
-        character.setName(characterDTO.name());
-        character.setRole(characterDTO.role());
-        character.setSpecies(characterDTO.species());
-        character.setGender(characterDTO.species());
-        character.setBirthDate(characterDTO.birthDate());
+        var character = new SpaceCharacter();
+        BeanUtils.copyProperties(characterDTO, character);
         character.setSpacecraft(spacecraft);
 
         SpaceCharacter savedCharacter = characterRepository.save(character);
-
         return convertToDTO(savedCharacter);
     }
 
     @Override
     @Cacheable(value = "charactersCache", key = "#spacecraftId")
     public List<CharacterDTO> getCharactersBySpacecraft(Long spacecraftId) {
+        //List<SpaceCharacter> characters = characterRepository.findBySpacecraftSpaceId(spacecraftId);
+        if (spacecraftId < 0) {
+            throw new IllegalArgumentException("Spacecraft ID cannot be negative");
+        }
+
         List<SpaceCharacter> characters = characterRepository.findBySpacecraftSpaceId(spacecraftId);
+
+        if (characters.isEmpty()) {
+            throw new ResourceNotFoundException("Characters not found for spacecraft ID " + spacecraftId);
+        }
         return characters.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
@@ -67,15 +72,10 @@ public class CharacterServiceImpl implements CharacterService {
     }
 
     private CharacterDTO convertToDTO(SpaceCharacter character) {
-        return new CharacterDTO(
-        character.getId(),
-        character.getName(),
-        character.getRole(),
-        character.getSpecies(),
-        character.getGender(),
-        character.getBirthDate(),
-        character.getSpacecraft().getSpaceId()
-        );
+        var characterDTO = new CharacterDTO();
+        BeanUtils.copyProperties(character, characterDTO);
+        characterDTO.setSpacecraftId(character.getSpacecraft().getSpaceId());
+        return characterDTO;
     }
 
 }

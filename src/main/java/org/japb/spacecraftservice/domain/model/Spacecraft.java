@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -30,10 +31,10 @@ public class Spacecraft extends RepresentationModel<Spacecraft> implements Seria
     @Column(nullable = false)
     private Integer passengerCapacity;
 
-    @ManyToOne
-    @JoinColumn(name = "series_movie_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "series_movie_id", nullable = false)
     private SeriesMovie seriesMovie;
 
-    @OneToMany(mappedBy = "spacecraft")
-    private List<SpaceCharacter> characters;
+    @OneToMany(mappedBy = "spacecraft", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SpaceCharacter> characters = new ArrayList<>();
 }

@@ -17,7 +17,7 @@ public class SeriesMovie extends RepresentationModel<SeriesMovie> implements Ser
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long serieId;
+    private Long id;
 
   @Column(nullable = false)
     private String title;
@@ -27,6 +27,6 @@ public class SeriesMovie extends RepresentationModel<SeriesMovie> implements Ser
   @Column(nullable = false)
     private String type; // "Series" o "Película"
 
-  @OneToMany(mappedBy = "seriesMovie")
+  @OneToMany(mappedBy = "seriesMovie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Spacecraft> spacecrafts;
 }

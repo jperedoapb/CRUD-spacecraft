@@ -8,15 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-
-//@RequestMapping("/api/spacecrafts/{spacecraftId}/characters")
 @RequestMapping("/api/characters")
 public interface CharacterControllerSpec {
-    @PostMapping("/spacecraft/{spacecraftId}")
+    @PostMapping("/{spacecraftId}")
     ResponseEntity<CharacterDTO> createCharacter(@PathVariable Long spacecraftId,
                                                  @Valid @RequestBody CharacterDTO characterDTO);
 
-    @GetMapping("/spacecraft/{spacecraftId}")
+    @GetMapping("/{spacecraftId}")
     ResponseEntity<List<CharacterDTO>> getCharactersBySpacecraft(@PathVariable Long spacecraftId);
 
     @GetMapping

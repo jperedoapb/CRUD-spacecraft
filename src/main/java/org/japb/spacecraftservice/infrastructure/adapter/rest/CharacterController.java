@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/characters")
 class CharacterController implements CharacterControllerSpec {
 
     private final CharacterService characterService;
@@ -29,6 +30,9 @@ class CharacterController implements CharacterControllerSpec {
 
     @Override
     public ResponseEntity<List<CharacterDTO>> getCharactersBySpacecraft(Long spacecraftId) {
+        if (spacecraftId < 0) {
+            throw new IllegalArgumentException("Character ID cannot be negative");
+        }
         List<CharacterDTO> characters = characterService.getCharactersBySpacecraft(spacecraftId);
         return new ResponseEntity<>(characters, HttpStatus.OK);
     }
