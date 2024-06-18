@@ -1,5 +1,6 @@
 package org.japb.spacecraftservice.application.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.japb.spacecraftservice.application.dto.CharacterDTO;
 import org.japb.spacecraftservice.application.dto.SpacecraftDTO;
 import org.japb.spacecraftservice.domain.exception.ResourceNotFoundException;
@@ -9,10 +10,12 @@ import org.japb.spacecraftservice.domain.model.Spacecraft;
 import org.japb.spacecraftservice.domain.repository.CharacterRepository;
 import org.japb.spacecraftservice.domain.repository.SeriesMovieRepository;
 import org.japb.spacecraftservice.domain.repository.SpacecraftRepository;
+import org.japb.spacecraftservice.specification.SpacecraftSpecifications;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 public class SpacecraftServiceImpl implements SpacecraftService {
     private final SpacecraftRepository spacecraftRepository;
@@ -38,6 +42,7 @@ public class SpacecraftServiceImpl implements SpacecraftService {
     @Override
     @Transactional
     public SpacecraftDTO createSpacecraft(SpacecraftDTO spacecraftDTO) {
+        log.info("Creating spacecraft: {}", spacecraftDTO.getName());
         Spacecraft spacecraft = convertToEntity(spacecraftDTO);
 
         // Fetch the SeriesMovie entity by ID and set it to the spacecraft
@@ -59,13 +64,15 @@ public class SpacecraftServiceImpl implements SpacecraftService {
 
             spacecraft.setCharacters(characters);
         }
-
+        log.info("Spacecraft created successfully: {}", spacecraft.getName());
         return convertToDTO(spacecraft);
     }
 
     @Override
     public List<SpacecraftDTO> getAllSpacecrafts() {
+        log.info("Fetching all spacecrafts from database");
         List<Spacecraft> spacecrafts = spacecraftRepository.findAll();
+        log.debug("Found {} spacecrafts", spacecrafts.size());
         return spacecrafts.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -73,14 +80,16 @@ public class SpacecraftServiceImpl implements SpacecraftService {
 
     @Override
     public Page<SpacecraftDTO> getAllSpacecrafts1(Pageable pageable) {
+        log.info("Fetching all spacecrafts with pagination");
         Page<Spacecraft> spacecraftsPage = spacecraftRepository.findAll(pageable);
-        System.out.println("Ordenamiento utilizado: " + pageable.getSort());
+        log.debug("Found {} spacecrafts", spacecraftsPage.getTotalElements());
         return spacecraftsPage.map(this::convertToDTO);
     }
 
 
     @Override
     public SpacecraftDTO getSpacecraftById(Long spaceId) {
+        log.info("Fetching spacecraft by id: {}", spaceId);
         Spacecraft spacecraft = spacecraftRepository.findById(spaceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Spacecraft not found with id " + spaceId));
         return convertToDTO(spacecraft);
@@ -88,6 +97,7 @@ public class SpacecraftServiceImpl implements SpacecraftService {
 
     @Override
     public SpacecraftDTO updateSpacecraft(Long spaceId, SpacecraftDTO spacecraftDTO) {
+        log.info("Updating spacecraft with id: {}", spaceId);
         Spacecraft spacecraft = spacecraftRepository.findById(spaceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Spacecraft not found with id " + spaceId));
 
@@ -102,19 +112,23 @@ public class SpacecraftServiceImpl implements SpacecraftService {
         }
 
         Spacecraft updatedSpacecraft = spacecraftRepository.save(spacecraft);
+        log.info("Spacecraft updated successfully: {}", updatedSpacecraft.getName());
         return convertToDTO(updatedSpacecraft);
     }
 
     @Override
     public void deleteSpacecraft(Long spaceId) {
+        log.info("Deleting spacecraft with id: {}", spaceId);
         Spacecraft spacecraft = spacecraftRepository.findById(spaceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Spacecraft not found with id " + spaceId));
         spacecraftRepository.delete(spacecraft);
+        log.info("Spacecraft deleted successfully: {}", spaceId);
     }
 
     @Override
     @Transactional
     public SpacecraftDTO partiallyUpdateSpacecraft(Long spaceId, Map<String, Object> updates) {
+        log.info("Partially updating spacecraft with id: {}", spaceId);
         Spacecraft existingSpacecraft = spacecraftRepository.findById(spaceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Spacecraft not found with id " + spaceId));
 
@@ -134,7 +148,19 @@ public class SpacecraftServiceImpl implements SpacecraftService {
         }
 
         Spacecraft updatedSpacecraft = spacecraftRepository.save(existingSpacecraft);
+        log.info("Spacecraft partially updated successfully: {}", updatedSpacecraft.getName());
         return convertToDTO(updatedSpacecraft);
+    }
+
+    @Override
+    public List<SpacecraftDTO> searchSpacecrafts(String name) {
+        log.info("Searching spacecrafts by name: {}", name);
+        Specification<Spacecraft> spec = SpacecraftSpecifications.nameContainsIgnoreCase(name);
+        List<Spacecraft> spacecrafts = spacecraftRepository.findAll(spec);
+        log.debug("Found {} spacecrafts matching the search criteria", spacecrafts.size());
+        return spacecrafts.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
 

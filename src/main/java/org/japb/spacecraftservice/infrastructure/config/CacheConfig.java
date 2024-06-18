@@ -14,6 +14,6 @@ public class CacheConfig  {
 
     @Bean
     public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("charactersCache", "allCharactersCache");
+        return new ConcurrentMapCacheManager("charactersCache", "allCharactersCache", "seriesMovieCache", "spacecraftCache");
     }
 }

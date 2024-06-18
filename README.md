@@ -11,10 +11,12 @@ Este proyecto es una aplicación Java Spring Boot que gestiona información sobr
 * JUnit 5
 * Mockito
 * Lombok
+* Flyway
 * Maven
 ## Diagrama de la solución 📊️
 - Diagrama de clases de la solución inicial:
   ![Diagram_class.png](Diagram_class.png)
+
 # Configuración del Proyecto
 ## Dependencias
 Las dependencias principales utilizadas en el proyecto se encuentran en el archivo pom.xml:
@@ -47,6 +49,8 @@ INSERT INTO TB_SPACE_CHARACTER (name, role, species, gender, birth_date, spacecr
 ```
 ## Ejecución de Pruebas
 Las pruebas unitarias se han implementado utilizando JUnit 5 y Mockito.
+- Grafico cobertura Jacoco
+  ![Diagram_jacoco.png](Diagram_jacoco.png)
 
 ## Ejecución del Proyecto
 Para ejecutar el proyecto, sigue estos pasos:
@@ -54,7 +58,8 @@ Para ejecutar el proyecto, sigue estos pasos:
 ## Clona el repositorio.
  1. Navega hasta el directorio del proyecto.
  2. Ejecuta mvn spring-boot:run.
- 3. La aplicación estará disponible en http://localhost:8080 y el H2 Console en http://localhost:8080/h2-console.
+ 3. La aplicación estará disponible en http://localhost:8080/swagger-ui/index.html#/ y el H2 Console en http://localhost:8080/h2-console.
+
 
 # Docker
 La tecnología Docker no solo ofrece la capacidad para ejecutar los contenedores, sino que también facilita su creación y diseño, así como el envío y el control de versiones de las imágenes, entre otras funciones.
@@ -106,6 +111,8 @@ docker build -t spacecraft-service:latest .
 * POST /api/characters: Crear un nuevo personaje.
 * PUT /api/characters/{id}: Actualizar un personaje existente.
 * DELETE /api/characters/{id}: Eliminar un personaje.
+- Grafico Swagger
+  ![Diagram_swagger.png](Diagram_swagger.png)
 # Contribución
 Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:
 1. Haz un fork del proyecto.
@@ -113,10 +120,9 @@ Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:
 3. Haz commit de tus cambios (git commit -am 'Agrega nueva característica').
 4. Haz push a la rama (git push origin feature/nueva-caracteristica).
 5. Abre un Pull Request.
+
 # Licencia
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo LICENSE para obtener más información.
 
 ## Autor ✒
-
-_Equipo de trabajo_
 * **Jaime Peredo** - *Desarrollador* - [jperedo](https://gitlab/jperedo)

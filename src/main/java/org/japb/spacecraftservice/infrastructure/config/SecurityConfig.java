@@ -31,8 +31,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.util.Arrays;
 
-//@Configuration
-//@EnableWebSecurity
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {

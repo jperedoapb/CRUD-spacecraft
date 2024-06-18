@@ -31,6 +31,7 @@ public class CharacterServiceImpl implements CharacterService {
     @Override
     @Transactional
     public CharacterDTO createCharacter(Long spacecraftId, CharacterDTO characterDTO) {
+        log.info("Creating character: {}", characterDTO);
         Spacecraft spacecraft = spacecraftRepository.findById(spacecraftId)
                 .orElseThrow(() -> new ResourceNotFoundException("Spacecraft not found with id " + spacecraftId));
 
@@ -39,13 +40,14 @@ public class CharacterServiceImpl implements CharacterService {
         character.setSpacecraft(spacecraft);
 
         SpaceCharacter savedCharacter = characterRepository.save(character);
+        log.info("Created character with ID: {}", savedCharacter.getId());
         return convertToDTO(savedCharacter);
     }
 
     @Override
     @Cacheable(value = "charactersCache", key = "#spacecraftId")
     public List<CharacterDTO> getCharactersBySpacecraft(Long spacecraftId) {
-        //List<SpaceCharacter> characters = characterRepository.findBySpacecraftSpaceId(spacecraftId);
+        log.info("Fetching characters for spacecraft with ID: {}", spacecraftId);
         if (spacecraftId < 0) {
             throw new IllegalArgumentException("Spacecraft ID cannot be negative");
         }
@@ -55,20 +57,23 @@ public class CharacterServiceImpl implements CharacterService {
         if (characters.isEmpty()) {
             throw new ResourceNotFoundException("Characters not found for spacecraft ID " + spacecraftId);
         }
+        log.debug("Found {} characters for spacecraft ID {}", characters.size(), spacecraftId);
         return characters.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @Override
     @Cacheable(value = "allCharactersCache")
     public List<CharacterDTO> getAllCharacters() {
+        log.info("Fetching all characters from database");
         List<SpaceCharacter> characters = characterRepository.findAll();
+        log.debug("Found {} characters", characters.size());
         return characters.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @Override
     @CacheEvict(cacheNames = { "allCharactersCache" }, allEntries = true)
     public void clearCache() {
-        log.info("Clear cache");
+        log.info("Clearing all characters cache");
     }
 
     private CharacterDTO convertToDTO(SpaceCharacter character) {

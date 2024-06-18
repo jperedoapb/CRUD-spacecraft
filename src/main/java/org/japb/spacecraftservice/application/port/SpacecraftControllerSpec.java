@@ -1,10 +1,14 @@
 package org.japb.spacecraftservice.application.port;
 
 import jakarta.validation.Valid;
+import net.kaczmarzyk.spring.data.jpa.domain.LikeIgnoreCase;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.japb.spacecraftservice.application.dto.SpacecraftDTO;
+import org.japb.spacecraftservice.domain.model.Spacecraft;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +25,7 @@ public interface SpacecraftControllerSpec {
     ResponseEntity<List<SpacecraftDTO>> getAllSpacecrafts();
 
 
-    @GetMapping("/datos/")
+    @GetMapping("/Page/")
     ResponseEntity<Page<SpacecraftDTO>> getAllSpacecrafts1(@PageableDefault(page = 0, size = 10, sort = "spaceId", direction = Sort.Direction.ASC) Pageable pageable);
 
     @GetMapping("/{spaceId}")
@@ -37,10 +41,8 @@ public interface SpacecraftControllerSpec {
     @PatchMapping("/{spaceId}")
     ResponseEntity<SpacecraftDTO> partiallyUpdateSpacecraft(@PathVariable Long spaceId,
                                                             @RequestBody Map<String, Object> updates);
-    /*
-    ResponseEntity<SpacecraftDTO> createSpacecraft(@PathVariable Long seriesMovieId,
-                                                   @Valid @RequestBody SpacecraftDTO spacecraftDTO);
 
-    ResponseEntity<List<SpacecraftDTO>> getSpacecraftsBySeriesMovie(@PathVariable Long seriesMovieId);
-     */
+    @GetMapping("/search")
+    ResponseEntity<List<SpacecraftDTO>> searchSpacecrafts(@RequestParam(value = "name", required = false) String name);
+
 }

@@ -1,11 +1,15 @@
 package org.japb.spacecraftservice.infrastructure.adapter.rest;
 
+import net.kaczmarzyk.spring.data.jpa.domain.LikeIgnoreCase;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.japb.spacecraftservice.application.dto.SpacecraftDTO;
 import org.japb.spacecraftservice.application.port.SpacecraftControllerSpec;
 import org.japb.spacecraftservice.application.service.SpacecraftService;
+import org.japb.spacecraftservice.domain.model.Spacecraft;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,4 +75,13 @@ public class SpacecraftController implements SpacecraftControllerSpec {
         SpacecraftDTO updatedSpacecraft = spacecraftService.partiallyUpdateSpacecraft(spaceId, updates);
         return ResponseEntity.ok(updatedSpacecraft);
     }
+
+    @Override
+    public ResponseEntity<List<SpacecraftDTO>> searchSpacecrafts(String name) {
+        List<SpacecraftDTO> spacecrafts = spacecraftService.searchSpacecrafts(name);
+
+        return ResponseEntity.ok(spacecrafts);
+    }
+
+
 }

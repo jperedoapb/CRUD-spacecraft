@@ -2,11 +2,13 @@ package org.japb.spacecraftservice.application.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode
 public class SeriesMovieDTO {
     private Long id;
     @NotBlank(message = "Title is mandatory")
